@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Test Suite</title>
+<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.16.0.css">
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="https://code.jquery.com/qunit/qunit-2.16.0.js"></script>
+  <script src="model.js"></script>
+  <script src="controller.js"></script>
+</body>
+
+<script>
+    function show(){}
+    
+  
+   
+      QUnit.test('legger til ny oppgave', function(assert) {
+          model.oppgaverinnput.oppgavenavn = 'fra test';
+          model.oppgaverinnput.oppgavebeskrivelse = 'test';
+        lag();
+        assert.equal(model.oppgaver.length, 3);
+      
+      });
+
+      QUnit.test('sjekker feil melding', function(assert) {
+        model.oppgaverinnput.oppgavenavn = '';
+        model.oppgaverinnput.oppgavebeskrivelse = '';
+        lag();
+        const actual = model.feilmelding;
+        const expected = 'Du må fylle inn! ';
+       
+        assert.equal(actual,expected);
+      });
+
+      QUnit.test('sjekker endring', function(assert) {
+        model.oppgaverinnput.oppgavenavn = 'ny';
+        model.oppgaverinnput.oppgavebeskrivelse = 'fff';
+
+        oppdater(1)
+        const actual = model.oppgaver[1].oppgavenavn
+        const expected = 'ny';   
+        assert.equal(actual,expected);
+      });
+
+
+      QUnit.test('sjekker feilmelding på endring', function(assert) {
+        model.oppgaverinnput.oppgavenavn = '';
+        model.oppgaverinnput.oppgavebeskrivelse = 'fff';
+
+        oppdater(1)
+        const actual = model.feilmelding;
+        const expected = 'Du må fylle inn! ';  
+        assert.equal(actual,expected);
+      });
+
+      QUnit.test('sjekker array mot array', function(assert) {
+   
+        fjernOppgave(1)
+        const actual = model.oppgaver; 
+        const expected = model.oppgaver =[  {
+            
+            oppgavenavn: 'Vaske klær',
+            oppgavebeskrivelse: 'Vaske alle klærna i kurven',
+            gjort: false,
+            gjortDato: '',
+            
+        },
+      ];  
+        assert.deepEqual(actual,expected);
+      });
+
+   
+
+  </script>
